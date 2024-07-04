@@ -12,4 +12,4 @@ EXPOSE 8000
 
 COPY init.sh /init.sh
 RUN chmod +x /init.sh
-CMD ["./init.sh"] 
+CMD ["sh", "/init.sh"]
