@@ -3,8 +3,11 @@ from typing import Union, Any
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-app = FastAPI()
+from app.api.router import api_router
 
+
+app = FastAPI()
+app.include_router(api_router)
 
 class Item(BaseModel):
     name: str

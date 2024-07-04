@@ -1,15 +1,13 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+WORKDIR /backend
 
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./app .
+COPY . .
 
 EXPOSE 8000
 
-COPY init.sh /init.sh
-RUN chmod +x /init.sh
-CMD ["sh", "/init.sh"]
+CMD ["sh", "init.sh"]
