@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: backend.Dockerfile
+    container_name: dev-smartmenu-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_started
+    restart: on-failure
+    env_file:
+      - ./compose/dev/backend.env
+      - ./compose/dev/database.env
+    volumes:
+      - ./app:/app
+
+  db:
+    container_name: dev-smartmenu-database
+    image: postgres:16.2
+    env_file:
+      - ./compose/dev/database.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - dev_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  dev_postgres_data:
