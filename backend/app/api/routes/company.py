@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from app.api.schemas.company import CompanyBase
 from fastapi import APIRouter, Depends, HTTPException
 from app.database.connection import get_db
-from app.database.models import Company
+from app.api.crud import company as crud_company
+from app.api.schemas.company import CompanyBase, CompanyCreate
 
 router = APIRouter()
 
@@ -12,38 +12,15 @@ router = APIRouter()
     response_model=CompanyBase,
 )
 def get_company(company_id: int, db: Session = Depends(get_db)):
-    item = db.query(Company).filter(Company.id == company_id).first()
-    if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return item
-
-# def get_companies(db: Session, skip: int = 0, limit: int = 10):
-#     return db.query(models.Company).offset(skip).limit(limit).all()
+    db_company = crud_company.get_company(db=db, company_id=company_id)
+    if db_company is None:
+        raise HTTPException(status_code=404, detail="Company not found")
+    return db_company
 
 
-# def create_company(db: Session, company: schemas.CompanyCreate):
-#     db_company = models.Company(**company.dict())
-#     db.add(db_company)
-#     db.commit()
-#     db.refresh(db_company)
-#     return db_company
-
-
-# def update_company(db: Session, company_id: int, company: schemas.CompanyUpdate):
-#     db_company = get_company(db, company_id)
-#     if db_company is None:
-#         return None
-#     for key, value in company.dict(exclude_unset=True).items():
-#         setattr(db_company, key, value)
-#     db.commit()
-#     db.refresh(db_company)
-#     return db_company
-
-
-# def delete_company(db: Session, company_id: int):
-#     db_company = get_company(db, company_id)
-#     if db_company is None:
-#         return None
-#     db.delete(db_company)
-#     db.commit()
-#     return db_company
+@router.post(
+    "/",
+    response_model=CompanyBase,
+)
+def create_company(company: CompanyCreate, db: Session = Depends(get_db)):
+    return crud_company.create_company(db=db, company=company)
