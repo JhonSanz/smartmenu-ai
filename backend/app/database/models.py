@@ -28,4 +28,5 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(100))
     password: Mapped[str] = mapped_column(String(300))
     phone: Mapped[str] = mapped_column(String(300))
-    company_id: Mapped[int] = mapped_column(ForeignKey("company.id"))
+    company_id: Mapped[int] = mapped_column(Integer, ForeignKey("company.id"))
+    company: Mapped["Company"] = relationship("Company", back_populates="user")

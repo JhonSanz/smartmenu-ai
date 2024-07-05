@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from app.api.schemas.company import CompanyBase
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.database.connection import get_db
+from app.database.models import Company
 
 router = APIRouter()
 
@@ -11,16 +12,10 @@ router = APIRouter()
     response_model=CompanyBase,
 )
 def get_company(company_id: int, db: Session = Depends(get_db)):
-    # return db.query(models.Company).filter(models.Company.id == company_id).first()
-    print(db)
-    return {
-        "id": company_id,
-        "name": "company 1",
-        "url": "c1",
-        "address": "pereira",
-        "timezone": "America/Bogota",
-    }
-
+    item = db.query(Company).filter(Company.id == company_id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return item
 
 # def get_companies(db: Session, skip: int = 0, limit: int = 10):
 #     return db.query(models.Company).offset(skip).limit(limit).all()
