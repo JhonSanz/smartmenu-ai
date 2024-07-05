@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.api.schemas.company import CompanyBase
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from app.database.connection import get_db
 
 router = APIRouter()
 
@@ -9,8 +10,9 @@ router = APIRouter()
     "/{id}",
     response_model=CompanyBase,
 )
-def get_company(company_id: int):
+def get_company(company_id: int, db: Session = Depends(get_db)):
     # return db.query(models.Company).filter(models.Company.id == company_id).first()
+    print(db)
     return {
         "id": company_id,
         "name": "company 1",

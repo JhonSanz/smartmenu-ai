@@ -6,13 +6,9 @@ from sqlalchemy import (
     Boolean,
     ForeignKey,
 )
-from sqlalchemy.orm import relationship, declarative_base
-from sqlalchemy.orm import mapped_column, relationship
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import relationship, mapped_column, relationship, Mapped
 from typing import List
-
-
-Base = declarative_base()
+from .connection import Base
 
 
 class Company(Base):
