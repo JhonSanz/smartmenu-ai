@@ -9,3 +9,7 @@
 1. install docker
 2. run `docker compose -f docker-compose.yml up --build`
 3. enjoy 
+
+
+alembic init app/alembic
+alembic revision --autogenerate -m "Initial migration"

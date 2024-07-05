@@ -27,4 +27,5 @@ class User(Base):
     identification: Mapped[str] = mapped_column(String(100))
     name: Mapped[str] = mapped_column(String(100))
     password: Mapped[str] = mapped_column(String(300))
+    phone: Mapped[str] = mapped_column(String(300))
     company_id: Mapped[int] = mapped_column(ForeignKey("company.id"))
