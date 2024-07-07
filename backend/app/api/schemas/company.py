@@ -17,8 +17,8 @@ class CompanyUpdate(CompanyBase):
     pass
 
 
-# class CompanyOut(CompanyBase):
-#     id: int
+class CompanyOut(CompanyBase):
+    id: int
 
-#     class Config:
-#         orm_mode = True
+    class Config:
+        orm_mode = True
