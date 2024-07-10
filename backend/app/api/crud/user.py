@@ -8,7 +8,7 @@ from app.api.utils.auth import get_password_hash
 from app.api.crud.company import get_company
 
 
-def create_user(db: Session, user: UserCreate) -> User:
+def create_user(*, db: Session, user: UserCreate) -> User:
     try:
         company = get_company(db=db, company_id=user.company_id)
         if not company:
@@ -37,19 +37,19 @@ def create_user(db: Session, user: UserCreate) -> User:
         raise e
 
 
-def get_user(db: Session, user_id: int) -> User:
+def get_user(*, db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
 
-def get_user_by_identification(db: Session, identification: str) -> User:
+def get_user_by_identification(*, db: Session, identification: str) -> User:
     return db.query(User).filter(User.identification == identification).first()
 
 
-def get_users(db: Session, skip: int = 0, limit: int = 10) -> List[User]:
+def get_users(*, db: Session, skip: int = 0, limit: int = 10) -> List[User]:
     return db.query(User).offset(skip).limit(limit).all()
 
 
-def update_user(db: Session, user_id: int, user: UserUpdate) -> User:
+def update_user(*, db: Session, user_id: int, user: UserUpdate) -> User:
     try:
         db_user = db.query(User).filter(User.id == user_id).first()
         if db_user is None:
@@ -66,7 +66,7 @@ def update_user(db: Session, user_id: int, user: UserUpdate) -> User:
         raise e
 
 
-def delete_user(db: Session, user_id: int) -> bool:
+def delete_user(*, db: Session, user_id: int) -> bool:
     try:
         db_user = db.query(User).filter(User.id == user_id).first()
         if db_user is None:
