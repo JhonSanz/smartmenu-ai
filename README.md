@@ -13,3 +13,6 @@
 
 alembic init app/alembic
 alembic revision --autogenerate -m "Initial migration"
+
+
+- agregar campo para el menu en formato json
