@@ -1,13 +1,25 @@
 from typing import List
+from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from app.api.schemas.user import UserCreate, UserUpdate
 from app.database.models import User
 from app.api.utils.auth import get_password_hash
+from app.api.crud.company import get_company
 
 
 def create_user(db: Session, user: UserCreate) -> User:
     try:
+        company = get_company(db=db, company_id=user.company_id)
+        if not company:
+            raise HTTPException(status_code=400, detail="Company ID does not exist")
+
+        user_exists = get_user_by_identification(db=db, company_id=user.identification)
+        if user_exists:
+            raise HTTPException(
+                status_code=400, detail="Identification already registered"
+            )
+
         hashed_password = get_password_hash(user.password)
         db_user = User(
             identification=user.identification,
