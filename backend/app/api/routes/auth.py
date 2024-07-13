@@ -8,7 +8,7 @@ from app.api.crud.auth import (
     create_access_token,
     ACCESS_TOKEN_EXPIRE_MINUTES,
 )
-from app.api.schemas.auth import Token
+from app.api.schemas.auth import Token, AuthRequest
 
 
 router = APIRouter()
@@ -16,9 +16,11 @@ router = APIRouter()
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
-    db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()
+    auth_request: AuthRequest, db: Session = Depends(get_db),
 ):
-    user = authenticate_user(db, form_data.username, form_data.password)
+    user = authenticate_user(
+        db=db, identification=auth_request.username, password=auth_request.password
+    )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

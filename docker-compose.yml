@@ -26,5 +26,12 @@ services:
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
 
+  adminer:
+    container_name: dev-smartmenu-adminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+
 volumes:
   dev_postgres_data:

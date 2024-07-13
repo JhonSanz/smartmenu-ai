@@ -19,10 +19,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def authenticate_user(*, db: Session, identification: str, password: str):
-    user = crud_user.get_user_by_identification(db, identification)
+    user = crud_user.get_user_by_identification(db=db, identification=identification)
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(plain_password=password, hashed_password=user.password):
         return False
     return user
 
@@ -53,7 +53,7 @@ async def get_current_user(
         identification: str = payload.get("sub")
     except jwt.PyJWTError:
         raise credentials_exception
-    user = crud_user.get_user_by_identification(db, identification)
+    user = crud_user.get_user_by_identification(db=db, identification=identification)
     if user is None:
         raise credentials_exception
     return user
