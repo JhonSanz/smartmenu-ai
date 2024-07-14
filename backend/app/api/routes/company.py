@@ -3,7 +3,14 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException
 from app.database.connection import get_db
 from app.api.crud import company as crud_company
-from app.api.schemas.company import CompanyBase, CompanyCreate, CompanyUpdate, CompanyOut
+from app.api.schemas.company import (
+    CompanyBase,
+    CompanyCreate,
+    CompanyUpdate,
+    CompanyOut,
+)
+from app.api.schemas.user import User
+from app.api.crud.auth import get_current_user
 
 router = APIRouter()
 
@@ -20,7 +27,13 @@ def get_company(company_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/companies/", response_model=List[CompanyOut])
-def read_companies(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def read_companies(
+    skip: int = 0,
+    limit: int = 10,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    print(current_user)
     companies = crud_company.get_companies(db=db, skip=skip, limit=limit)
     return companies
 

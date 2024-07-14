@@ -30,3 +30,18 @@ class User(Base):
     phone: Mapped[str] = mapped_column(String(300))
     company_id: Mapped[int] = mapped_column(Integer, ForeignKey("company.id"))
     company: Mapped["Company"] = relationship("Company", back_populates="user")
+
+
+class Media(Base):
+    __tablename__ = "media"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    url: Mapped[str] = mapped_column(String(100))
+
+
+class CompanyMedia(Base):
+    __tablename__ = "companymedia"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    company_id: Mapped[int] = mapped_column(Integer, ForeignKey("company.id"))
+    company: Mapped["Company"] = relationship("Company", back_populates="companymedia")
+    media_id: Mapped[int] = mapped_column(Integer, ForeignKey("media.id"))
+    media: Mapped["Media"] = relationship("Media", back_populates="companymedia")
